@@ -603,8 +603,7 @@ def do_backup(dynamo, read_capacity, tableQueue=None, srcTable=None):
                     update_provisioned_throughput(dynamo,
                                                   table_name,
                                                   original_read_capacity,
-                                                  original_write_capacity,
-                                                  False)
+                                                  original_write_capacity)
 
                 logging.info("Backup for " + table_name + " table completed. Time taken: " + str(
                     datetime.datetime.now().replace(microsecond=0) - start_time))
