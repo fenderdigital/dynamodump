@@ -648,6 +648,9 @@ def do_restore(dynamo, sleep_interval, source_table, destination_table, write_ca
         else:
             write_capacity = original_write_capacity
 
+    if original_read_capacity <= 0:
+        original_read_capacity = 5
+
     # override GSI write capacities if specified, else use RESTORE_WRITE_CAPACITY if original
     # write capacity is lower
     original_gsi_write_capacities = []
@@ -657,6 +660,9 @@ def do_restore(dynamo, sleep_interval, source_table, destination_table, write_ca
 
             if gsi["ProvisionedThroughput"]["WriteCapacityUnits"] < int(write_capacity):
                 gsi["ProvisionedThroughput"]["WriteCapacityUnits"] = int(write_capacity)
+
+            if gsi["ProvisionedThroughput"]["ReadCapacityUnits"] < int(original_read_capacity):
+                gsi["ProvisionedThroughput"]["ReadCapacityUnits"] = int(original_read_capacity)
 
     # temp provisioned throughput for restore
     table_provisioned_throughput = {"ReadCapacityUnits": int(original_read_capacity),
